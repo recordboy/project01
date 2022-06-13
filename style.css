@@ -11,6 +11,7 @@
 }
 
 #elevator .tower {
+    position: relative;
     float: left;
     margin-right: 10px;
 }
@@ -21,7 +22,11 @@
     height: 50px;
 }
 
-#elevator .tower > div.on {
+#elevator .tower > div.room {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    opacity: 0.7;
     background-color: #ccc;
 }
 
