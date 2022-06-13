@@ -1,5 +1,8 @@
 // 엘레베이터 만들기
-let global = [];
+// 일단 러프하게 작업
+
+// 각 엘리베이터 정보를 기록하는 배열
+let elevatorArr = [];
 
 window.onload = function () {
     init();
@@ -86,7 +89,7 @@ function createElevator(data) {
 
             // 각 층 값 넣기
             if (j === 1) {
-                global.push(j);
+                elevatorArr.push([j, false]);
             }
             tower.appendChild(towerFloor);
         }
@@ -99,7 +102,7 @@ function createElevator(data) {
 }
 
 
-function moveElevator(idx) {
+function moveElevator(floorIdx) {
 
     // 엘레베이터 객체
     const elevator = document.getElementById('elevator');
@@ -108,13 +111,42 @@ function moveElevator(idx) {
     for (let i = 0; i < elevatorTower.length; i++) {
 
 
-        if (global[i] !== idx) {
-            moveAnimate(elevatorTower[i], idx);
+        if (elevatorArr[0][i] !== floorIdx) {
+            moveAnimate(i, floorIdx);
             return;
         }
     }
 }
 
-function moveAnimate(target, idx) {
-    debugger
+function moveAnimate(towerIdx, floorIdx) {
+
+    // 엘레베이터 객체
+    const elevator = document.getElementById('elevator');
+    const elevatorTower = elevator.childNodes;
+
+    // 선택된 타워의 엘베
+    const room = elevatorTower[towerIdx].querySelector('.room');
+
+
+    let moveCount = 0;
+    let spaceNum = (floorIdx - 1) * 50;
+
+    let interval = setInterval(function() {
+
+        elevatorArr[towerIdx][1] = true;
+
+        moveCount++;
+        
+        room.style.bottom = moveCount + 'px';
+
+        // 
+        if (moveCount > spaceNum) {
+            clearInterval(interval);
+            elevatorArr[towerIdx][0] = floorIdx;
+            elevatorArr[towerIdx][1] = false;
+            console.log(elevatorArr)
+        }
+
+    }, 20);
+
 }
