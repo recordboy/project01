@@ -23,11 +23,15 @@
     height: 50px;
 }
 
-#elevator .tower > div.room {
+#elevator .tower .room {
     position: absolute;
     bottom: 0;
     left: 0;
-    opacity: 0.7;
-    background-color: #ccc;
+    opacity: 0.5;
+    background-color: #333;
+}
+
+#elevator .tower .room.waiting {
+    background-color: red;
 }
 

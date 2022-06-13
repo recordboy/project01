@@ -110,7 +110,9 @@ function moveElevator(floorIdx) {
 
     for (let i = 0; i < elevatorTower.length; i++) {
 
-        if (elevatorArr[i][0] !== floorIdx) {
+        if (elevatorArr[i][0] !== floorIdx && // 같은층이 아니고
+            elevatorArr[i][1] === false       // 이동중이 아니고
+        ) {
             moveAnimate(i, floorIdx);
             return;
         }
@@ -126,7 +128,8 @@ function moveAnimate(towerIdx, floorIdx) {
     // 선택된 타워의 엘베
     const room = elevatorTower[towerIdx].querySelector('.room');
 
-    let moveCount = 0;
+    let moveCount = (elevatorArr[towerIdx][0] - 1) * 50;
+
     let spaceNum = (floorIdx - 1) * 50;
 
     // 이동 인터벌
@@ -136,12 +139,27 @@ function moveAnimate(towerIdx, floorIdx) {
         room.style.bottom = moveCount + 'px';
 
         if (moveCount > spaceNum) {
+
             clearInterval(interval);
-            elevatorArr[towerIdx][0] = floorIdx;
-            elevatorArr[towerIdx][1] = false;
-            console.log(elevatorArr)
+            console.log(elevatorArr);
+            room.classList.add('waiting');
+
+            waiting();
         }
 
     }, 10);
+
+    // 도착하고 2초동안 대기
+    function waiting() {
+
+        setTimeout(function() {
+            room.classList.remove('waiting');
+            elevatorArr[towerIdx][0] = floorIdx;
+            elevatorArr[towerIdx][1] = false;
+            console.log(elevatorArr);
+
+        }, 2000);
+
+    }
 
 }
