@@ -25,7 +25,12 @@ function addEvent() {
     });
 
     btnElevator.addEventListener('click', function (e) {
+
+
         let btnId = e.target.id;
+
+        // e.target.disabled = true;
+
         let btnIdx = Number(btnId.substring(9));
         moveElevator(btnIdx);
     });
@@ -84,6 +89,7 @@ function createElevator(data) {
         tower = document.createElement('div');
         tower.classList = 'tower';
         elevator.appendChild(tower);
+
         for (let j = data.floorVal; j > 0; j--) {
             towerFloor = document.createElement('div');
 
@@ -108,58 +114,127 @@ function moveElevator(floorIdx) {
     const elevator = document.getElementById('elevator');
     const elevatorTower = elevator.childNodes;
 
+
+    // let minimum = elevatorArr[0][0];
+    // let maximum = elevatorArr[elevatorTower.length - 1][0];
+
+    var arr = [];
+
+    // for (let i = elevatorTower.length - 1; i >= 0; i--) {
     for (let i = 0; i < elevatorTower.length; i++) {
 
-        if (elevatorArr[i][0] !== floorIdx && // 같은층이 아니고
-            elevatorArr[i][1] === false       // 이동중이 아니고
-        ) {
-            moveAnimate(i, floorIdx);
-            return;
+        // 같은층이 아니고 이동중이 아니면
+        if (elevatorArr[i][0] !== floorIdx && elevatorArr[i][1] === false) {
+
+
+            arr.push(elevatorArr[i][0]);
+
+        } else {
+            arr.push(0);
         }
+    }
+
+
+    var a = func(arr, floorIdx);
+
+
+    var arrIdx = arr.indexOf(a);
+
+
+    moveAnimate(arrIdx, floorIdx);
+
+
+    function func(arr, floorIdx) {
+
+        let data = arr;
+        let target = floorIdx;
+        let near = 0;
+        let abs = 0;
+        let min = 50;
+
+        for (let i = 0; i < data.length; i++) {
+
+            if ((data[i] - target) < 0) {
+                abs = -(data[i] - target);
+            } else {
+                abs = data[i] - target;
+            }
+
+            if (abs < min) {
+                min = abs;
+                near = data[i];
+            }
+        }
+
+        // 가까운값
+        return near;
+
     }
 }
 
 function moveAnimate(towerIdx, floorIdx) {
 
-    // 엘레베이터 객체
-    const elevator = document.getElementById('elevator');
-    const elevatorTower = elevator.childNodes;
+    const elevator = document.getElementById('elevator');        // 엘레베이터 전체 객체
+    const elevatorTower = elevator.childNodes;                   // 엘레베이터 각 타워
+    const room = elevatorTower[towerIdx].querySelector('.room'); // 선택된 타워의 엘베
+    let moveY = (elevatorArr[towerIdx][0] - 1) * 50;             // 현재 좌표(실시간 이동 좌표)
+    let afterY = (floorIdx - 1) * 50;                            // 이동할 좌표
 
-    // 선택된 타워의 엘베
-    const room = elevatorTower[towerIdx].querySelector('.room');
 
-    let moveCount = (elevatorArr[towerIdx][0] - 1) * 50;
 
-    let spaceNum = (floorIdx - 1) * 50;
+
 
     // 이동 인터벌
-    let interval = setInterval(function() {
+    let interval = setInterval(function () {
         elevatorArr[towerIdx][1] = true;
-        moveCount++;
-        room.style.bottom = moveCount + 'px';
 
-        if (moveCount > spaceNum) {
+        // 이동할 좌표가 현재 좌표보다 클경우 올라감
+        if (moveY < afterY) {
+            moveY++;
 
-            clearInterval(interval);
-            console.log(elevatorArr);
-            room.classList.add('waiting');
-
-            waiting();
+            // 이동할 좌표가 현재 좌표보다 작을경우 내려감
+        } else {
+            moveY--;
         }
 
+        // 도달하면 엘레베이터 멈춤
+        if (moveY === afterY) {
+            stop();
+        }
+
+        // 이동
+        room.style.bottom = moveY + 'px';
+
     }, 10);
+
+    // 멈춤
+    function stop() {
+        clearInterval(interval);
+        console.log(elevatorArr);
+        room.classList.add('waiting');
+
+        // 대기
+        waiting();
+
+    }
 
     // 도착하고 2초동안 대기
     function waiting() {
 
-        setTimeout(function() {
+        setTimeout(function () {
             room.classList.remove('waiting');
             elevatorArr[towerIdx][0] = floorIdx;
             elevatorArr[towerIdx][1] = false;
             console.log(elevatorArr);
+            
+            // const elevatorBtn = document.getElementById('elevator_btn');
+
+            // var a = elevatorBtn.childNodes[floorIdx - 1];
+            // elevatorBtn.childNodes[floorIdx - 1].disabled = false;
+
+            // debugger
 
         }, 2000);
-
     }
 
 }
