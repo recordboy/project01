@@ -110,8 +110,7 @@ function moveElevator(floorIdx) {
 
     for (let i = 0; i < elevatorTower.length; i++) {
 
-
-        if (elevatorArr[0][i] !== floorIdx) {
+        if (elevatorArr[i][0] !== floorIdx) {
             moveAnimate(i, floorIdx);
             return;
         }
@@ -127,19 +126,15 @@ function moveAnimate(towerIdx, floorIdx) {
     // 선택된 타워의 엘베
     const room = elevatorTower[towerIdx].querySelector('.room');
 
-
     let moveCount = 0;
     let spaceNum = (floorIdx - 1) * 50;
 
+    // 이동 인터벌
     let interval = setInterval(function() {
-
         elevatorArr[towerIdx][1] = true;
-
         moveCount++;
-        
         room.style.bottom = moveCount + 'px';
 
-        // 
         if (moveCount > spaceNum) {
             clearInterval(interval);
             elevatorArr[towerIdx][0] = floorIdx;
@@ -147,6 +142,6 @@ function moveAnimate(towerIdx, floorIdx) {
             console.log(elevatorArr)
         }
 
-    }, 20);
+    }, 10);
 
 }
