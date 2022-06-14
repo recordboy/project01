@@ -27,6 +27,7 @@ function elevator() {
 
             let btnId = e.target.id;
             let btnIdx = Number(btnId.substring(9));
+
             moveElevator(btnIdx);
 
             // 버튼 비활성화, 이동이 불가한경우 클릭시 비활성화 안함
@@ -36,8 +37,8 @@ function elevator() {
         });
 
         // 임시 테스트
-        let data = getElevatorData();
-        createElevator(data);
+        // let data = getElevatorData();
+        // createElevator(data);
     }
 
     // 엘레베이터 정보 가져오기
@@ -52,6 +53,11 @@ function elevator() {
             alert('값을 넣어주세요');
             return;
         }
+
+        // 인풋 초기화
+        document.getElementById('txt_floor').value = '';
+        document.getElementById('txt_number').value = '';
+
         return data;
     }
 

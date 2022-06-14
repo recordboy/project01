@@ -1,37 +1,91 @@
 @charset "utf-8";
 
+
+
+.wrap {
+    margin: 10px;
+}
+
+.controller {
+    padding-bottom: 20px;
+}
+
+.controller label {
+    display: block;
+    float: left;
+    margin-right: 20px;
+    font-size: 13px;
+}
+
+.controller input[type=text] {
+    border: 2px solid #666;
+    box-sizing: border-box;
+    padding: 0 5px;
+    width: 80px;
+    height: 30px;
+    width: 80px;
+}
+
+.controller button {
+    border: 2px solid #666;
+    width: 80px;
+    height: 30px;
+    font-size: 13px;
+    background: none;
+    cursor: pointer;
+}
+
 #elevator_btn {
     float: left;
-    margin-right: 10px;
-
+    margin-right: 20px;
 }
 
 #elevator_btn > button {
     display: block;
+    margin-bottom: 10px;
+    border: 2px solid #666;
+    width: 50px;
+    height: 30px;
+    font-size: 13px;
+    background: none;
+    cursor: pointer;
+}
+
+#elevator_btn > button:disabled {
+    opacity: 0.5;
 }
 
 #elevator .tower {
     position: relative;
     float: left;
     margin-right: 10px;
+    border: 2px solid #666;
 }
 
 #elevator .tower > div {
-    border: 2px solid #333;
     box-sizing: border-box;
+    border-top: 2px solid #666;
     width: 50px;
     height: 50px;
 }
 
+#elevator .tower > div:first-child {
+    border-top: none;
+}
+
 #elevator .tower .room {
     position: absolute;
+    border: none;
     bottom: 0;
     left: 0;
-    opacity: 0.5;
-    background-color: #333;
+    opacity: 0.7;
+    background-color: skyblue;
+    transition: background-color 0.3s ease;
 }
 
 #elevator .tower .room.waiting {
-    background-color: red;
+    background-color: blue;
+    transition: background-color 0.3s ease;
+    opacity: 0.7;
 }
 
