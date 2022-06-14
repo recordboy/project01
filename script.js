@@ -29,7 +29,7 @@ function addEvent() {
 
         let btnId = e.target.id;
 
-        // e.target.disabled = true;
+        e.target.disabled = true;
 
         let btnIdx = Number(btnId.substring(9));
         moveElevator(btnIdx);
@@ -115,36 +115,95 @@ function moveElevator(floorIdx) {
     const elevatorTower = elevator.childNodes;
 
 
-    // let minimum = elevatorArr[0][0];
-    // let maximum = elevatorArr[elevatorTower.length - 1][0];
 
-    var arr = [];
 
-    // for (let i = elevatorTower.length - 1; i >= 0; i--) {
+
+    let floorArr = [];  // 각 엘레베이터 층 수 배열
+    let near = 0;       // 배열중 가장 격차가 작은 수
+    let nearIdx = 0;    // 격차가 작은수의 인덱스
+
+    // 각 엘레베이터 층 수를 배열에 담는다
     for (let i = 0; i < elevatorTower.length; i++) {
+        floorArr.push(elevatorArr[i][0]);
+    }
 
-        // 같은층이 아니고 이동중이 아니면
-        if (elevatorArr[i][0] !== floorIdx && elevatorArr[i][1] === false) {
+    recursion();
 
+    function recursion() {
 
-            arr.push(elevatorArr[i][0]);
+        near = getMinNum(floorArr, floorIdx);
+        nearIdx = floorArr.indexOf(near); 
 
-        } else {
-            arr.push(0);
+        if (near === floorIdx) {
+
+            
+            floorArr.splice(nearIdx, 1, 'N');
+            recursion();
         }
+
     }
 
 
-    var a = func(arr, floorIdx);
+    moveAnimate(nearIdx, floorIdx);
 
 
-    var arrIdx = arr.indexOf(a);
 
 
-    moveAnimate(arrIdx, floorIdx);
 
 
-    function func(arr, floorIdx) {
+
+
+
+    // for (let j = 0; j < elevatorTower.length; j++) {
+
+
+    //     if (elevatorArr[j][0] !== floorIdx && // 같은층이 아니면
+    //         elevatorArr[j][1] === false       // 이동중이 아니면
+    //     ) {
+
+    //         /////////////////////////////////////////////
+
+
+
+
+
+    //         let floorArr = [];  // 각 엘레베이터 층 수 배열
+    //         let near = 0;       // 배열중 가장 격차가 작은 수
+    //         let nearIdx = 0;    // 격차가 작은수의 인덱스
+
+    //         // 각 엘레베이터 층 수를 배열에 담는다
+    //         for (let i = 0; i < elevatorTower.length; i++) {
+    //             floorArr.push(elevatorArr[i][0]);
+    //         }
+
+    //         recursion();
+
+    //         function recursion() {
+
+    //             near = getMinNum(floorArr, floorIdx);  
+    //             nearIdx = floorArr.indexOf(near); 
+
+    //             if (near === floorIdx) {
+    //                 floorArr.splice(nearIdx, 1);
+    //                 recursion();
+    //             }
+
+    //         }
+
+
+    //         /////////////////////////////////////////////
+
+    //         moveAnimate(nearIdx, floorIdx);
+    //         return;
+
+    //     }
+    // }
+
+
+
+
+
+    function getMinNum(arr, floorIdx) {
 
         let data = arr;
         let target = floorIdx;
@@ -166,10 +225,16 @@ function moveElevator(floorIdx) {
             }
         }
 
-        // 가까운값
+        // 가까운 값
         return near;
-
     }
+
+
+
+
+
+
+
 }
 
 function moveAnimate(towerIdx, floorIdx) {
@@ -180,10 +245,6 @@ function moveAnimate(towerIdx, floorIdx) {
     let moveY = (elevatorArr[towerIdx][0] - 1) * 50;             // 현재 좌표(실시간 이동 좌표)
     let afterY = (floorIdx - 1) * 50;                            // 이동할 좌표
 
-
-
-
-
     // 이동 인터벌
     let interval = setInterval(function () {
         elevatorArr[towerIdx][1] = true;
@@ -192,7 +253,7 @@ function moveAnimate(towerIdx, floorIdx) {
         if (moveY < afterY) {
             moveY++;
 
-            // 이동할 좌표가 현재 좌표보다 작을경우 내려감
+        // 이동할 좌표가 현재 좌표보다 작을경우 내려감
         } else {
             moveY--;
         }
@@ -205,7 +266,7 @@ function moveAnimate(towerIdx, floorIdx) {
         // 이동
         room.style.bottom = moveY + 'px';
 
-    }, 10);
+    }, 5);
 
     // 멈춤
     function stop() {
@@ -227,14 +288,23 @@ function moveAnimate(towerIdx, floorIdx) {
             elevatorArr[towerIdx][1] = false;
             console.log(elevatorArr);
             
-            // const elevatorBtn = document.getElementById('elevator_btn');
+            const elevatorBtn = document.getElementById('elevator_btn');
 
-            // var a = elevatorBtn.childNodes[floorIdx - 1];
-            // elevatorBtn.childNodes[floorIdx - 1].disabled = false;
 
-            // debugger
+            let btnIdNum = '';
 
-        }, 2000);
+            for (let i = 0; i < elevatorBtn.childNodes.length; i++) {
+
+                btnIdNum = elevatorBtn.childNodes[i].id.substring(9);
+
+                if (Number(btnIdNum) === floorIdx) {
+                    elevatorBtn.childNodes[i].disabled = false;
+                }
+
+            }
+
+
+        }, 500);
     }
 
 }
