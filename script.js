@@ -18,13 +18,24 @@ function elevator() {
 
         // 엘레베이터 생성
         btnCreate.addEventListener('click', function (e) {
+
+            // 엘레베이터 초기화
+            while (elevator.hasChildNodes()) {
+                elevator.removeChild(elevator.firstChild);
+            }
+
+            // 엘레베이터 버튼 초기화
+            while (btnElevator.hasChildNodes()) {
+                btnElevator.removeChild(btnElevator.firstChild);
+            }
+
+
             let data = getElevatorData();
             createElevator(data);
         });
 
         // 엘레베이터 층수 버튼
         btnElevator.addEventListener('click', function (e) {
-
             let btnId = e.target.id;
             let btnIdx = Number(btnId.substring(9));
 
@@ -35,10 +46,6 @@ function elevator() {
                 e.target.disabled = true;
             }
         });
-
-        // 임시 테스트
-        // let data = getElevatorData();
-        // createElevator(data);
     }
 
     // 엘레베이터 정보 가져오기
@@ -69,6 +76,8 @@ function elevator() {
         let towerBtn = null;
         let towerBtnTxt = '';
         let room = null;
+        let doorL = null;
+        let doorR = null;
 
         // 엘레베이터 버튼 생성
         for (let i = data.numberVal; i > 0; i--) {
@@ -90,7 +99,7 @@ function elevator() {
             elevator.appendChild(tower);
 
             for (let j = data.floorVal; j > 0; j--) {
-                
+
                 // 각 타워 층 생성
                 towerFloor = document.createElement('div');
 
@@ -105,8 +114,14 @@ function elevator() {
 
             // 엘레베이터 룸 생성
             room = document.createElement('div');
+            doorL = document.createElement('div');
+            doorR = document.createElement('div');
             room.classList = 'room';
+            doorL.classList = 'door_l';
+            doorR.classList = 'door_r';
             tower.appendChild(room);
+            room.appendChild(doorL);
+            room.appendChild(doorR);
         }
     }
 
@@ -143,7 +158,7 @@ function elevator() {
                     recursion();
                 }
             }
-            
+
             // 격차가 작은수의 인덱스
             return nearIdx;
         }
@@ -164,7 +179,7 @@ function elevator() {
         if (elevatorData[towerIdx][1] === false) {
             moveAnimate(towerIdx, floorIdx);
 
-        // 가장 가까운 엘레베이터가 이동중에는 다른 층수 클릭시 멈춰있는 엘레베이터 호출
+            // 가장 가까운 엘레베이터가 이동중에는 다른 층수 클릭시 멈춰있는 엘레베이터 호출
         } else {
             for (let j = 0; j < elevatorTower.length; j++) {
                 if (elevatorData[j][1] === false) {
@@ -207,6 +222,9 @@ function elevator() {
         let moveY = (elevatorData[towerIdx][0] - 1) * 50;            // 현재 좌표(실시간 이동 좌표)
         let afterY = (floorIdx - 1) * 50;                            // 이동할 좌표
 
+        room.classList.add('move');
+
+
         // 이동 인터벌
         let interval = setInterval(function () {
             elevatorData[towerIdx][1] = true;
@@ -215,7 +233,7 @@ function elevator() {
             if (moveY < afterY) {
                 moveY++;
 
-            // 이동할 좌표가 현재 좌표보다 작을경우 내려감
+                // 이동할 좌표가 현재 좌표보다 작을경우 내려감
             } else {
                 moveY--;
             }
@@ -234,6 +252,7 @@ function elevator() {
         function stop() {
             clearInterval(interval);
             console.log(elevatorData);
+            room.classList.remove('move');
             room.classList.add('waiting');
 
             // 엘레베이터 대기

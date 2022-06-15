@@ -1,7 +1,5 @@
 @charset "utf-8";
 
-
-
 .wrap {
     margin: 10px;
 }
@@ -31,8 +29,9 @@
     width: 80px;
     height: 30px;
     font-size: 13px;
-    background: none;
+    background-color: #e7e7e7;
     cursor: pointer;
+    color: #333;
 }
 
 #elevator_btn {
@@ -47,8 +46,9 @@
     width: 50px;
     height: 30px;
     font-size: 13px;
-    background: none;
+    background-color: #e7e7e7;
     cursor: pointer;
+    color: #333;
 }
 
 #elevator_btn > button:disabled {
@@ -71,21 +71,48 @@
 
 #elevator .tower > div:first-child {
     border-top: none;
+    height: 48px;
 }
 
 #elevator .tower .room {
+    overflow: hidden;
     position: absolute;
     border: none;
     bottom: 0;
     left: 0;
+    height: 48px;
+    background-color: #e7e7e7;
+}
+
+#elevator .tower .room > div {
+    position: absolute;
+    width: 50%;
+    height: 50px;
     opacity: 0.7;
     background-color: skyblue;
-    transition: background-color 0.3s ease;
+    transition: 0.5s ease;
 }
 
-#elevator .tower .room.waiting {
+#elevator .tower .room.move > div {
+    background-color: indianred;
+}
+
+#elevator .tower .room.waiting > div {
     background-color: blue;
-    transition: background-color 0.3s ease;
-    opacity: 0.7;
 }
 
+#elevator .tower .room .door_l {
+    left: 0;
+}
+
+#elevator .tower .room .door_r {
+    right: 0;
+}
+
+#elevator .tower .room.waiting .door_l {
+    left: -25px;
+}
+
+#elevator .tower .room.waiting .door_r {
+    right: -25px;
+}
