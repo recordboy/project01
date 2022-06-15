@@ -11,9 +11,9 @@ function elevator() {
     let elevatorData = [];                                       // 각 엘리베이터 정보를 기록하는 배열
     let moveBln = true;                                          // 현재 이동 가능 여부
 
-    // 이벤트 초기화
     addEvent();
 
+    // 이벤트 초기화
     function addEvent() {
 
         // 엘레베이터 생성
@@ -128,7 +128,34 @@ function elevator() {
     // 엘레베이터 이동
     function moveElevator(floorIdx) {
 
-        function func(arr) {
+        // 가장 가까운 엘레베이터 타워의 인덱스
+        let towerIdx = getMoveIdx(elevatorTower);
+
+        // 이동 가능 여부
+        moveBln = true;
+
+        // 이동이 불가한 경우
+        if (towerIdx === -1) {
+            moveBln = false;
+            return;
+        }
+
+        // 가장 가까운 엘레베이터 이동
+        if (elevatorData[towerIdx][1] === false) {
+            moveAnimate(towerIdx, floorIdx);
+
+        // 가장 가까운 엘레베이터가 이동중에는 다른 층수 클릭시 멈춰있는 엘레베이터 호출
+        } else {
+            for (let j = 0; j < elevatorTower.length; j++) {
+                if (elevatorData[j][1] === false) {
+                    moveAnimate(j, floorIdx);
+                    return;
+                }
+            }
+        }
+
+        // 이동할 층 인덱스 구하기
+        function getMoveIdx(arr) {
 
             let floorArr = [];  // 각 엘레베이터 층 수 배열
             let near = 0;       // 배열중 가장 격차가 작은 수
@@ -154,7 +181,7 @@ function elevator() {
                 if (near === floorIdx) {
                     floorArr.splice(nearIdx, 1, 'N');
 
-                    // 다시 가장 가까운 층 수를 찾음(재귀호출)
+                    // 다시 가장 가까운 층 수를 찾음
                     recursion();
                 }
             }
@@ -163,31 +190,6 @@ function elevator() {
             return nearIdx;
         }
 
-        // 가장 가까운 엘레베이터 타워의 인덱스
-        let towerIdx = func(elevatorTower);
-
-        // 이동 가능 여부
-        moveBln = true;
-
-        // 이동이 불가한 경우
-        if (towerIdx === -1) {
-            moveBln = false;
-            return;
-        }
-
-        // 가장 가까운 엘레베이터 이동
-        if (elevatorData[towerIdx][1] === false) {
-            moveAnimate(towerIdx, floorIdx);
-
-            // 가장 가까운 엘레베이터가 이동중에는 다른 층수 클릭시 멈춰있는 엘레베이터 호출
-        } else {
-            for (let j = 0; j < elevatorTower.length; j++) {
-                if (elevatorData[j][1] === false) {
-                    moveAnimate(j, floorIdx);
-                    return;
-                }
-            }
-        }
         // 배열중 가장 가까운 값 찾기
         function getMinNum(arr, floorIdx) {
 
@@ -223,7 +225,6 @@ function elevator() {
         let afterY = (floorIdx - 1) * 50;                            // 이동할 좌표
 
         room.classList.add('move');
-
 
         // 이동 인터벌
         let interval = setInterval(function () {
